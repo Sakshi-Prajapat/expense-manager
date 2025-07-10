@@ -16,7 +16,10 @@ const categorySchema = new mongoose.Schema({
         required: true,
     }
 })
-categorySchema.plugin(AutoIncrement, { inc_field: 'id' });
+categorySchema.plugin(AutoIncrement, {
+  id: "category_counter",
+  inc_field: "id"
+});
 const Category = mongoose.model('Category', categorySchema);
 
 module.exports = Category;
