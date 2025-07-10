@@ -20,7 +20,10 @@ const userSchema = new mongoose.Schema({
     default: Date.now
   }
 })
-userSchema.plugin(AutoIncrement, { inc_field: 'id' });
+userSchema.plugin(AutoIncrement, {
+  id: "user_counter",
+  inc_field: "id"
+});
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
