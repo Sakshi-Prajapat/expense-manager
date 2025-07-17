@@ -1,51 +1,74 @@
 const Expense = require("../modals/expenses");
+const message = require("../utils/message");
 
+const {
+  Field_Require,
+  Server_Error,
+  Failed_Expense,
+  Expense_Created,
+  Expense_Fetched_Successfully,
+  Expense_Not_Found,
+  Update_Expense,
+  Delete_Expense,
+} = message;
 async function handlePostExpense(req, res) {
   try {
-    const { title,amount, description,date,categoryId,userId} = req.body;
-    if (!title||!amount||! description||!categoryId) {
+    const { title, amount, description, date, categoryId, userId } = req.body;
+    if (!title || !amount || !categoryId) {
       return res.status(400).json({
         status: 400,
         error: true,
-        message: "All fields are required",
+        message: Field_Require,
       });
     }
     const ExpenseDetails = await Expense.create({
-     title,amount, description,date,categoryId,userId
+      title,
+      amount,
+      description,
+      date,
+      categoryId,
+      userId,
     });
     ExpenseDetails.save();
     if (!ExpenseDetails) {
       return res.status(500).json({
         status: 500,
         error: true,
-        message: "Failed to create Expense",
+        message: Failed_Expense,
       });
     }
     return res.status(201).json({
       status: 201,
       error: false,
-      message: "Expense created successfully",
+      message: Expense_Created,
       data: ExpenseDetails,
     });
   } catch (error) {
     return res.status(500).json({
       status: 500,
       error: true,
-      message: "Internal server error",
+      message: Server_Error,
     });
   }
 }
 
 async function handleAllExpense(req, res) {
-  const expenseData = await Expense.find({});
-  return res.status(200).json({
-    status: 200,
-    error: false,
-    message: "All Expense fetched successfully",
-    data: expenseData,
-  });
+  try {
+    const expenseData = await Expense.find({});
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: Expense_Fetched_Successfully,
+      data: expenseData,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      error: true,
+      message: Server_Error,
+    });
+  }
 }
-
 
 async function handleExpenseById(req, res) {
   try {
@@ -54,14 +77,14 @@ async function handleExpenseById(req, res) {
     return res.status(200).json({
       status: 200,
       error: false,
-      message: "Expense data fetched successfully",
+      message: Expense_Fetched_Successfully,
       data: ExpenseData,
     });
   } catch (error) {
     return res.status(500).json({
       status: 500,
       error: true,
-      message: "Failed to fetch Expense data",
+      message: Server_Error,
     });
   }
 }
@@ -69,38 +92,43 @@ async function handleExpenseById(req, res) {
 async function handleUpdateExpenseById(req, res) {
   try {
     const { id } = req.params;
-    const {title,amount, description,date,categoryId,userId} = req.body;
+    const { title, amount, description, date, categoryId, userId } = req.body;
 
-    if (!title||!amount||! description||!date||!categoryId) {
+    if (!title || !amount || !description || !date || !categoryId) {
       return res.status(400).json({
         status: 400,
         error: true,
-        message: "All fields are required",
+        message: Field_Require,
       });
     }
 
     const updatedExpense = await Expense.findByIdAndUpdate(id, {
-     title:title,amount:amount, description:description,date:date,categoryId:categoryId,userId:userId
+      title: title,
+      amount: amount,
+      description: description,
+      date: date,
+      categoryId: categoryId,
+      userId: userId,
     });
 
     if (!updatedExpense) {
       return res.status(404).json({
         status: 404,
         error: true,
-        message: "Expense not found",
+        message: Expense_Not_Found,
       });
     }
     return res.status(200).json({
       status: 200,
       error: false,
-      message: "Expense updated successfully",
+      message: Update_Expense,
       data: updatedExpense,
     });
   } catch (error) {
     return res.status(500).json({
       status: 500,
       error: true,
-      message: "Failed to update Expense data",
+      message: Server_Error,
     });
   }
 }
@@ -113,19 +141,19 @@ async function handleDeleteExpenseById(req, res) {
       return res.status(404).json({
         status: 404,
         error: true,
-        message: "Expense not found",
+        message: Expense_Not_Found,
       });
     }
     return res.status(200).json({
       status: 200,
       error: false,
-      message: "Expense Delted successfully",
+      message: Delete_Expense,
     });
   } catch (error) {
     return res.status(500).json({
       status: 500,
       error: true,
-      message: "Failed to update Expense data",
+      message: Server_Error,
     });
   }
 }
@@ -135,5 +163,5 @@ module.exports = {
   handleAllExpense,
   handleExpenseById,
   handleUpdateExpenseById,
-  handleDeleteExpenseById
+  handleDeleteExpenseById,
 };

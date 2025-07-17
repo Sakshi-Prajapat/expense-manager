@@ -5,14 +5,25 @@ const {
   setUser,
 } = require("../services/auth");
 
+const message = require("../utils/message");
+const {
+  User_Already_Exist,
+  User_Created,
+  Not_Found,
+  Invalid_Password,
+  Login_Success,
+  Login_Error,
+} = message;
+
 async function handlePostUser(req, res) {
   const { email, username, password } = req.body;
 
   const userDetails = await User.findOne({ email });
   if (userDetails) {
-    return res.status(403).json({
-      status: "fail",
-      message: "User already exists",
+    return res.status(404).json({
+      status: 404,
+      error: true,
+      message: User_Already_Exist,
     });
   }
   const hashedPassword = await getEncryptedPassword(password);
@@ -24,8 +35,9 @@ async function handlePostUser(req, res) {
 
   result.save();
   return res.status(201).json({
-    status: "success",
-    message: "User created successfully",
+    status: 201,
+    error: false,
+    message: User_Created,
     user: result,
   });
 }
@@ -40,7 +52,7 @@ async function handleSignIn(req, res) {
       return res.status(404).json({
         status: 404,
         error: true,
-        message: "User not found",
+        message: Not_Found,
       });
     }
 
@@ -49,7 +61,7 @@ async function handleSignIn(req, res) {
       return res.status(403).json({
         status: 403,
         error: true,
-        message: "Invalid password",
+        message: Invalid_Password,
       });
     }
 
@@ -57,19 +69,18 @@ async function handleSignIn(req, res) {
     return res.status(200).json({
       status: 200,
       error: false,
-      message: "User signed in successfully",
+      message: Login_Success,
       token: token,
     });
   } catch (error) {
     return res.status(500).json({
       status: 500,
       error: true,
-      message: "An error occurred while signing in",
+      message: Login_Error,
       error: error.message,
     });
   }
 }
-
 
 module.exports = {
   handlePostUser,

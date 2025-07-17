@@ -1,4 +1,16 @@
 const Category = require("../modals/category");
+const message = require("../utils/message");
+const {
+  Field_Require,
+  Failed_Category,
+  Category_created,
+  Server_Error,
+  Category_Fetched_Success,
+  All_Category,
+  Category_Fetched_Successfully,
+  Category_Not_Found,
+  Delete_Category,
+} = message;
 
 async function handlePostCategory(req, res) {
   try {
@@ -7,7 +19,7 @@ async function handlePostCategory(req, res) {
       return res.status(400).json({
         status: 400,
         error: true,
-        message: "All fields are required",
+        message: Field_Require,
       });
     }
     const categoryDetails = await Category.create({
@@ -20,20 +32,20 @@ async function handlePostCategory(req, res) {
       return res.status(500).json({
         status: 500,
         error: true,
-        message: "Failed to create category",
+        message: Failed_Category,
       });
     }
     return res.status(201).json({
       status: 201,
       error: false,
-      message: "Category created successfully",
+      message: Category_created,
       data: categoryDetails,
     });
   } catch (error) {
     return res.status(500).json({
       status: 500,
       error: true,
-      message: "Internal server error",
+      message: Server_Error,
     });
   }
 }
@@ -43,7 +55,7 @@ async function handleAllCategories(req, res) {
   return res.status(200).json({
     status: 200,
     error: false,
-    message: "All categories fetched successfully",
+    message: Category_Fetched_Success,
     data: userData,
   });
 }
@@ -53,7 +65,7 @@ async function handleAllCategories(req, res) {
   return res.status(200).json({
     status: 200,
     error: false,
-    message: "All categories fetched successfully",
+    message: All_Category,
     data: userData,
   });
 }
@@ -65,14 +77,14 @@ async function handleCategoryById(req, res) {
     return res.status(200).json({
       status: 200,
       error: false,
-      message: "Category data fetched successfully",
+      message: Category_Fetched_Successfully,
       data: userData,
     });
   } catch (error) {
     return res.status(500).json({
       status: 500,
       error: true,
-      message: "Failed to fetch category data",
+      message: Server_Error,
     });
   }
 }
@@ -86,7 +98,7 @@ async function handleUpdateCategoryById(req, res) {
       return res.status(400).json({
         status: 400,
         error: true,
-        message: "All fields are required",
+        message: Field_Require,
       });
     }
 
@@ -100,20 +112,20 @@ async function handleUpdateCategoryById(req, res) {
       return res.status(404).json({
         status: 404,
         error: true,
-        message: "Category not found",
+        message: Category_Not_Found,
       });
     }
     return res.status(200).json({
       status: 200,
       error: false,
-      message: "Category updated successfully",
+      message: Category_Not_Found,
       data: updatedCategory,
     });
   } catch (error) {
     return res.status(500).json({
       status: 500,
       error: true,
-      message: "Failed to update category data",
+      message: Server_Error,
     });
   }
 }
@@ -126,19 +138,19 @@ async function handleDeleteCategoryById(req, res) {
       return res.status(404).json({
         status: 404,
         error: true,
-        message: "Category not found",
+        message: Category_Not_Found,
       });
     }
     return res.status(200).json({
       status: 200,
       error: false,
-      message: "Category Delted successfully",
+      message: Delete_Category,
     });
   } catch (error) {
     return res.status(500).json({
       status: 500,
       error: true,
-      message: "Failed to update category data",
+      message: Server_Error,
     });
   }
 }
@@ -148,5 +160,5 @@ module.exports = {
   handleAllCategories,
   handleCategoryById,
   handleUpdateCategoryById,
-  handleDeleteCategoryById
+  handleDeleteCategoryById,
 };
