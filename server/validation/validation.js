@@ -2,7 +2,7 @@ const Joi = require("joi");
 const message = require('../utils/message')
 
 
-const {} = message
+const {Password_Not_Correct,Password_Required,Password_Error} = message
 
 function postUserValidation(req, res, next) {
   const userSchema = Joi.object({
@@ -53,7 +53,7 @@ function loginUserValidation(req, res, next) {
       .label("Password")
       .messages({
         "string.pattern.base":
-          "Password must be of 8-16 character with uppercase, lowercase, number, and special characters(@$!%*?&)",
+          `${Password_Error}`,
       }),
   });
   const { error } = userSchema.validate(req.body);
