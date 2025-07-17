@@ -1,6 +1,7 @@
 export const message = {
    Password_Not_Correct:'Password is not correct',
    Password_Required:'Password is required',
+   Password_Error: 'Password must be of 8-16 character with uppercase, lowercase, number, and special characters(@$!%*?&)',
 
    User_Already_Exist :'User already exists',
    User_Created : 'User created successfully',
