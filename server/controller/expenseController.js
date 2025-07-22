@@ -1,5 +1,5 @@
 const Expense = require("../modals/expenses");
-const message = require("../utils/message");
+const {message} = require("../utils/message");
 
 const {
   Field_Require,
@@ -11,10 +11,11 @@ const {
   Update_Expense,
   Delete_Expense,
 } = message;
+
 async function handlePostExpense(req, res) {
   try {
-    const { title, amount, description, date, categoryId, userId } = req.body;
-    if (!title || !amount || !categoryId) {
+    const { title,amount, description, date, categoryId, userId ,price,quantity } = req.body;
+    if (!title || !categoryId ||!price||!quantity||!userId) {
       return res.status(400).json({
         status: 400,
         error: true,
@@ -23,7 +24,9 @@ async function handlePostExpense(req, res) {
     }
     const ExpenseDetails = await Expense.create({
       title,
-      amount,
+      price,
+      quantity,
+      amount:price*quantity,
       description,
       date,
       categoryId,
@@ -44,10 +47,12 @@ async function handlePostExpense(req, res) {
       data: ExpenseDetails,
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       status: 500,
       error: true,
       message: Server_Error,
+      errorMessage:error
     });
   }
 }
@@ -62,10 +67,12 @@ async function handleAllExpense(req, res) {
       data: expenseData,
     });
   } catch (error) {
+    
     return res.status(500).json({
       status: 500,
       error: true,
       message: Server_Error,
+      
     });
   }
 }

@@ -1,8 +1,7 @@
 const Joi = require("joi");
-const message = require('../utils/message')
+const { message } = require("../utils/message");
 
-
-const {Password_Not_Correct,Password_Required,Password_Error} = message
+const { Password_Not_Correct, Password_Required, Password_Error } = message;
 
 function postUserValidation(req, res, next) {
   const userSchema = Joi.object({
@@ -22,19 +21,21 @@ function postUserValidation(req, res, next) {
       .required()
       .label("Password")
       .messages({
-        "string.pattern.base": `${Password_Not_Correct}` ,
+        // "string.pattern.base": `${Password_Not_Correct}` ,
+        "string.pattern.base": `${Password_Not_Correct}`,
         "string.empty": `${Password_Required}`,
-        
       }),
   });
-  const { error } = userSchema.validate(req.body);
+  const { error } = userSchema.validate(req.body,{ abortEarly: false });
 
-  if (error) {
-   
+ if (error) {
+    const errorArray = error?.details?.map((item) => {
+      return item.message;
+    });
     return res.status(400).json({
       status: 400,
       error: true,
-      message: error.details[0].message,
+      message: errorArray,
     });
   }
   next();
@@ -52,17 +53,19 @@ function loginUserValidation(req, res, next) {
       .required()
       .label("Password")
       .messages({
-        "string.pattern.base":
-          `${Password_Error}`,
+        "string.pattern.base": `${Password_Error}`,
       }),
   });
-  const { error } = userSchema.validate(req.body);
+  const { error } = userSchema.validate(req.body,{ abortEarly: false });
 
   if (error) {
+    const errorArray = error?.details?.map((item) => {
+      return item.message;
+    });
     return res.status(400).json({
       status: 400,
       error: true,
-      message: error.details[0].message,
+      message: errorArray,
     });
   }
   next();
@@ -72,36 +75,44 @@ function categoryValidation(req, res, next) {
   const categorySchema = Joi.object({
     categoryName: Joi.string().required().label("Category"),
     type: Joi.string().required().label("Type"),
-    userId : Joi.string()
+    userId: Joi.string(),
   });
-  const { error } = categorySchema.validate(req.body);
+  const { error } = categorySchema.validate(req.body,{ abortEarly: false });
 
   if (error) {
+    const errorArray = error?.details?.map((item) => {
+      return item.message;
+    });
     return res.status(400).json({
       status: 400,
       error: true,
-      message: error.details[0].message,
+      message: errorArray,
     });
   }
   next();
 }
 
-function handlePostExpenseValidation(req,res,next){
+function handlePostExpenseValidation(req, res, next) {
   const expenseSchema = Joi.object({
     title: Joi.string().required().label("Title"),
-    amount: Joi.number().required().min(1).label("Amount"),
-    description : Joi.string().min(10).max(100).label("Description"),
-    date:Joi.date(),
-    userId : Joi.string(),
-    categoryId : Joi.string(),
+    price: Joi.number().min(1).required().label("Price"),
+    quantity: Joi.number().min(1).required().label("Quantity"),
+    amount: Joi.number().label("Amount"),
+    description: Joi.string().min(10).max(100).label("Description"),
+    date: Joi.date(),
+    userId: Joi.string(),
+    categoryId: Joi.string(),
   });
-  const { error } = expenseSchema.validate(req.body);
+  const { error } = expenseSchema.validate(req.body, { abortEarly: false });
 
   if (error) {
+    const errorArray = error?.details?.map((item) => {
+      return item.message;
+    });
     return res.status(400).json({
       status: 400,
       error: true,
-      message: error.details[0].message,
+      message: errorArray,
     });
   }
   next();
@@ -111,5 +122,5 @@ module.exports = {
   postUserValidation,
   loginUserValidation,
   categoryValidation,
-  handlePostExpenseValidation
+  handlePostExpenseValidation,
 };

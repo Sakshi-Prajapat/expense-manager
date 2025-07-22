@@ -13,7 +13,7 @@ function getDecryptedPassword(password, hashedPassword) {
   return isMatch;
 }
 
-function setUser(user) {
+function setToken(user) {
   return jwt.sign(
     {
       id: user._id,
@@ -26,7 +26,7 @@ function setUser(user) {
   );
 }
 
-function getUser(token) {
+function getToken(token) {
   if (!token) {
     return null;
   }
@@ -40,6 +40,6 @@ function getUser(token) {
 module.exports = {
   getEncryptedPassword,
   getDecryptedPassword,
-  setUser,
-  getUser
+  setToken,
+  getToken
 };
