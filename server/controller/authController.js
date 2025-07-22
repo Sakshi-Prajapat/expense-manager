@@ -2,16 +2,16 @@ const User = require("../modals/user");
 const {
   getEncryptedPassword,
   getDecryptedPassword,
-  setUser,
+  setToken,
 } = require("../services/auth");
 
-const message = require("../utils/message");
+const {message} = require("../utils/message");
 const {
   User_Already_Exist,
   User_Created,
   Not_Found,
   Invalid_Password,
-  Login_Success,
+  Login_Success, 
   Login_Error,
 } = message;
 
@@ -65,7 +65,7 @@ async function handleSignIn(req, res) {
       });
     }
 
-    const token = setUser(userDetails);
+    const token = setToken(userDetails);
     return res.status(200).json({
       status: 200,
       error: false,

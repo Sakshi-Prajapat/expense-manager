@@ -1,5 +1,5 @@
 const Category = require("../modals/category");
-const message = require("../utils/message");
+const { message } = require("../utils/message");
 const {
   Field_Require,
   Failed_Category,
@@ -22,6 +22,26 @@ async function handlePostCategory(req, res) {
         message: Field_Require,
       });
     }
+
+    const isCategory = await Category.findOne({ categoryName });
+    if (isCategory) {
+      const isType = await Category.findOne({ type });
+      if (isType) {
+        return res.status(500).json({
+          status: 400,
+          error: true,
+          message: 'type with this category is already exist',
+        });
+      } 
+      // else {
+      //   return res.status(500).json({
+      //     status: 400,
+      //     error: true,
+      //     message: '',
+      //   });
+      // }
+    }
+
     const categoryDetails = await Category.create({
       categoryName,
       type,
