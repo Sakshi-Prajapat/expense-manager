@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {categoryValidation} = require('../validation/validation')
+const {authTokenMiddleware} = require('../middleware/authorization') 
 
 const {
   handlePostCategory,
@@ -10,12 +11,12 @@ const {
   handleDeleteCategoryById,
 } = require("../controller/categoryController");
 
-router.route("/category").post(categoryValidation, handlePostCategory).get(handleAllCategories);
+router.route("/category").post(categoryValidation, handlePostCategory).get(authTokenMiddleware,handleAllCategories);
 router
   .route("/category/:id")
-  .get(handleCategoryById)
-  .patch(handleUpdateCategoryById)
-  .delete(handleDeleteCategoryById); 
+  .get(authTokenMiddleware,handleCategoryById)
+  .patch(authTokenMiddleware,handleUpdateCategoryById)
+  .delete(authTokenMiddleware,handleDeleteCategoryById); 
 // router.get('/category', handleAllCategories);
 
 module.exports = router;
