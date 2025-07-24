@@ -11,7 +11,7 @@ const {
   handleDeleteCategoryById,
 } = require("../controller/categoryController");
 
-router.route("/category").post(categoryValidation, handlePostCategory).get(authTokenMiddleware,handleAllCategories);
+router.route("/category").post(authTokenMiddleware , categoryValidation, handlePostCategory).get(authTokenMiddleware,handleAllCategories);
 router
   .route("/category/:id")
   .get(authTokenMiddleware,handleCategoryById)
