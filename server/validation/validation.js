@@ -1,8 +1,12 @@
 const Joi = require("joi");
 const { message } = require("../utils/message");
 
-const { Password_Not_Correct, Password_Required, Password_Error } = message;
+require("dotenv").config();
 
+
+const { Password_Not_Correct, Password_Required, Password_Error } = message;
+// console.log("validation",process.env.JWT_TOKEN_SECRET_KEY)
+ 
 function postUserValidation(req, res, next) {
   const userSchema = Joi.object({
     username: Joi.string()

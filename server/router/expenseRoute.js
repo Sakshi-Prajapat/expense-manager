@@ -7,15 +7,16 @@ const {
   handleUpdateExpenseById,
 } = require("../controller/expenseController");
 const {handlePostExpenseValidation} = require('../validation/validation')
+const {authTokenMiddleware} = require('../middleware/authorization') 
 
 const router = express.Router();
 
-router.route("/expense").post(handlePostExpenseValidation,handlePostExpense).get(handleAllExpense);
+router.route("/expense").post(authTokenMiddleware,handlePostExpenseValidation,handlePostExpense).get(authTokenMiddleware,handleAllExpense);
 // router.post('/expense',handlePostExpense)
 
 router.route("/expense/:id")
-  .get(handleExpenseById)
-  .patch(handleUpdateExpenseById)
-  .delete(handleDeleteExpenseById);
+  .get(authTokenMiddleware,handleExpenseById)
+  .patch(authTokenMiddleware,handleUpdateExpenseById)
+  .delete(authTokenMiddleware,handleDeleteExpenseById);
   
   module.exports = router

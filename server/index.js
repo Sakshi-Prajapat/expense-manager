@@ -1,12 +1,14 @@
 const express = require("express");
 const { connectToDB } = require("./connection");
-
+const dotenv = require('dotenv');
 // Importing routes
 const authRoute = require("./router/authRoute");
 const categoryRoute = require("./router/categoryRoute");
 const expenseRoute = require("./router/expenseRoute");
 
+dotenv.config()
 const app = express();
+
 const PORT = 8003;
 connectToDB("mongodb://127.0.0.1:27017/express-manager")
   .then(() => {

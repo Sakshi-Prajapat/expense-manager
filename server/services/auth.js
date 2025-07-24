@@ -1,6 +1,7 @@
  const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const secret = "sakshi#4321";
+require("dotenv").config();
+const secret = process.env.JWT_TOKEN_SECRET_KEY;
 
 
  function getEncryptedPassword(password) {
