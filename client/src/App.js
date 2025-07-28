@@ -1,11 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
-import { SingIn } from './pages/singIn/SingIn';
+
 import { SingUp } from './pages/singUp/SingUp';
+import SignIn from './pages/singIn/SingIn';
 
 function App() {
   return (
     <>
+    {/* <SignIn/> */}
     <SingUp/>
     </>
   );
