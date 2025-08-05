@@ -40,6 +40,7 @@ export const SingUp = () => {
             flexDirection: "column",
             padding: 4,
             backgroundColor: theme.palette.secondary.main,
+            // opacity:0.7
           }}
         >
           <Grid container spacing={3}>
@@ -72,6 +73,7 @@ export const SingUp = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            // opacity:0.7
           }}
         >
           <Typography variant="h6" color="white">
@@ -82,3 +84,4 @@ export const SingUp = () => {
     </Box>
   );
 };
+
